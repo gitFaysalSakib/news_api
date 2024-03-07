@@ -83,6 +83,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     newsViewModel.fetchNewsChannelHeadlinesApi(nameNews);
                   });
                 }
+                if (FilterList.independent.name == item.name) {
+                  nameNews = "independent";
+                  setState(() {
+                    newsViewModel.fetchNewsChannelHeadlinesApi(nameNews);
+                  });
+                }
+                 if (FilterList.alJazeera.name == item.name) {
+                  nameNews = "al-jazeera";
+                  setState(() {
+                    newsViewModel.fetchNewsChannelHeadlinesApi(nameNews);
+                  });
+                }
 
                 //context.read<NewsBloc>()..add(FetchNewsChannelHeadlines(name));
               },
@@ -99,6 +111,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     PopupMenuItem<FilterList>(
                       value: FilterList.abcnews,
                       child: Text('Abcnews'),
+                    ),
+                    PopupMenuItem<FilterList>(
+                      value: FilterList.independent,
+                      child: Text('Independent'),
+                    ),
+                    PopupMenuItem<FilterList>(
+                      value: FilterList.alJazeera,
+                      child: Text('AlJazeera'),
                     ),
                   ])
         ],
@@ -172,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         newsSource:
                                                             apiDataDisplay
                                                                 .source
-                                                                .toString(),
+                                                                .toString(), pageIdentity: nameNews,
                                                       )));
                                         },
 
@@ -334,26 +354,58 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: const EdgeInsets.only(bottom: 15),
                               child: Row(
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          apiDataDisplay.urlToImage.toString(),
-                                      fit: BoxFit.cover,
-                                      height: height * .18,
-                                      width: width * .3,
-                                      placeholder: (context, url) => Container(
-                                        child: Center(
-                                          child: SpinKitCircle(
-                                            color: Colors.blue,
-                                            size: 50,
+                                  InkWell(
+                                    onTap: (){
+                                       Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NewsDetailsScreen(
+                                                        newsTitle:
+                                                            apiDataDisplay.title
+                                                                .toString(),
+                                                        newsImage:
+                                                            apiDataDisplay
+                                                                .urlToImage
+                                                                .toString(),
+                                                        newsAuthor:
+                                                            apiDataDisplay
+                                                                .author
+                                                                .toString(),
+                                                        newsDesc: apiDataDisplay
+                                                            .description
+                                                            .toString(),
+                                                        newsContent:
+                                                            apiDataDisplay
+                                                                .content
+                                                                .toString(),
+                                                        newsSource:
+                                                            apiDataDisplay
+                                                                .source
+                                                                .toString(), pageIdentity: nameNews,
+                                                      )));
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            apiDataDisplay.urlToImage.toString(),
+                                        fit: BoxFit.cover,
+                                        height: height * .18,
+                                        width: width * .3,
+                                        placeholder: (context, url) => Container(
+                                          child: Center(
+                                            child: SpinKitCircle(
+                                              color: Colors.blue,
+                                              size: 50,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(
-                                        Icons.error_outline,
-                                        color: Colors.red,
+                                        errorWidget: (context, url, error) =>
+                                            Icon(
+                                          Icons.error_outline,
+                                          color: Colors.red,
+                                        ),
                                       ),
                                     ),
                                   ),

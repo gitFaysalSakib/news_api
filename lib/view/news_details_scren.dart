@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:news_api/view/category_screen.dart';
 import 'package:news_api/view/home/home_screen.dart';
+import 'package:news_api/view_models/news_view_model.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
   String newsImage;
@@ -12,12 +14,14 @@ class NewsDetailsScreen extends StatefulWidget {
   String newsDesc;
   String newsContent;
   String newsSource;
+  String pageIdentity;
   NewsDetailsScreen(
       {required this.newsImage,
       required this.newsTitle,
       required this.newsAuthor,
       required this.newsDesc,
       required this.newsContent,
+      required this.pageIdentity,
       required this.newsSource});
 
   @override
@@ -25,7 +29,16 @@ class NewsDetailsScreen extends StatefulWidget {
 }
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
-  final format =  DateFormat('MMMM dd,yyyy');
+  final format = DateFormat('MMMM dd,yyyy');
+  NewsViewModel newsViewModel = NewsViewModel();
+  List<String> categoriesList = [
+    'General',
+    'Entertainment',
+    'Health',
+    'Sports',
+    'Business',
+    'Technology'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +48,29 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          widget.pageIdentity.toString(),
+          style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
             onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(id: 'bbc-news',)));
+              
+              if (categoriesList.contains(widget.pageIdentity) == true) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => CategoryScreen()));
+              } else {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreen(
+                              id: widget.pageIdentity,
+                            )));
+              }
 
-},
+              
+            },
             icon: Icon(
               Icons.arrow_back_ios,
               color: Colors.grey[600],
@@ -99,8 +128,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                             color: Colors.blueAccent,
                             fontWeight: FontWeight.w600),
                       ),
-                    )
-                    ),
+                    )),
                     // Text('${format.format(dateTime)}',
                     // softWrap: true,
                     //   overflow: TextOverflow.ellipsis,
@@ -110,11 +138,19 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                     // ),
                   ],
                 ),
-                Text(widget.newsDesc.toString(),style: GoogleFonts.poppins(fontSize: 15,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w500),),
-                        SizedBox(height: Kheight*0.03,),
-                        SizedBox(height: Kheight*0.03,)
+                Text(
+                  widget.newsDesc.toString(),
+                  style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: Kheight * 0.03,
+                ),
+                SizedBox(
+                  height: Kheight * 0.03,
+                )
               ],
             ),
           )

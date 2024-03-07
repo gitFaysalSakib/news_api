@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:news_api/model/news_category_model.dart';
+import 'package:news_api/view/news_details_scren.dart';
 import 'package:news_api/view_models/news_view_model.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -54,7 +55,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     return InkWell(
                       onTap: () {
                         categoryName = categoriesList[index];
-                        print(categoriesList[index]);
+                      //  print(categoriesList[index]);
                         setState(() {
                           newsViewModel.fetchNewsCategoires(categoryName);
 
@@ -108,25 +109,59 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Row(
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      apiDataDisplay.urlToImage.toString(),
-                                  fit: BoxFit.cover,
-                                  height: height * .18,
-                                  width: width * .3,
-                                  placeholder: (context, url) => Container(
-                                    child: Center(
-                                      child: SpinKitCircle(
-                                        size: 50,
-                                        color: Colors.blue,
+                              InkWell(
+                                onTap: (){
+                                  print("image click");
+                                   Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      NewsDetailsScreen(
+                                                        
+                                                        newsTitle:
+                                                            apiDataDisplay.title
+                                                                .toString(),
+                                                        newsImage:
+                                                            apiDataDisplay
+                                                                .urlToImage
+                                                                .toString(),
+                                                        newsAuthor:
+                                                            apiDataDisplay
+                                                                .author
+                                                                .toString(),
+                                                        newsDesc: apiDataDisplay
+                                                            .description
+                                                            .toString(),
+                                                        newsContent:
+                                                            apiDataDisplay
+                                                                .content
+                                                                .toString(),
+                                                        newsSource:
+                                                            apiDataDisplay
+                                                                .source
+                                                                .toString(), pageIdentity: categoryName,
+                                                      )));
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        apiDataDisplay.urlToImage.toString(),
+                                    fit: BoxFit.cover,
+                                    height: height * .18,
+                                    width: width * .3,
+                                    placeholder: (context, url) => Container(
+                                      child: Center(
+                                        child: SpinKitCircle(
+                                          size: 50,
+                                          color: Colors.blue,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  errorWidget: (context, url, error) => Icon(
-                                    Icons.error_outline,
-                                    color: Colors.red,
+                                    errorWidget: (context, url, error) => Icon(
+                                      Icons.error_outline,
+                                      color: Colors.red,
+                                    ),
                                   ),
                                 ),
                               ),
